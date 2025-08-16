@@ -1,7 +1,11 @@
-# Lists in Python are mutable (changeable) and ordered (element order is preserved)
-# Tuples in Python are immutable (unchangeable) and ordered (element order is preserved)
-# Sets in Python are unordered (order is not guaranteed) and contain only unique elements
-# Dictionaries in Python are mutable (modifiable) and associative (access by key)
+# Lists in Python are mutable (changeable) and ordered
+#       (element order is preserved)
+# Tuples in Python are immutable (unchangeable) and
+#       ordered (element order is preserved)
+# Sets in Python are unordered (order is not guaranteed)
+#       and contain only unique elements
+# Dictionaries in Python are mutable (modifiable) and
+#       associative (access by key)
 
 ft_list = ["Hello", "tata!"]
 ft_tuple = ("Hello", "toto!")
