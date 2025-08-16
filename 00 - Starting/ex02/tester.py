@@ -13,12 +13,19 @@ ft_float = 3.14
 
 ft_none = None
 
-ft_lambda = lambda x: x
+
+def ft_lambda(x):
+    return x
+
+
 def ft_func(x):
     return x
 
+
 class MyClass:
     pass
+
+
 ft_obj = MyClass()
 
 test_objects = [
