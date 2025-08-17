@@ -66,7 +66,7 @@ def main():
         result = encode_morse(text)
         print(result)
     except AssertionError as e:
-        print(e)
+        print(f"AssertionError: {e}")
 
 
 if __name__ == "__main__":
