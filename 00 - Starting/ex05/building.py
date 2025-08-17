@@ -44,7 +44,6 @@ def count_categories(text: str) -> dict[str, int]:
         elif ch in punctuation_set:
             counts["punctuation"] += 1
         else:
-            # Characters outside the categories are ignored.
             pass
 
     return counts
@@ -108,7 +107,6 @@ def main() -> None:
     except AssertionError as exc:
         print(f"AssertionError: {exc}")
     except Exception as exc:
-        # Catch-all to comply with the "no uncaught exceptions" rule.
         print(f"Error: {exc}")
 
 
