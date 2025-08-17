@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,11 +7,11 @@ name = "ft_package"
 version = "0.0.1"
 description = "A sample test package"
 authors = [
-    { name="eagle", email="eagle@42.fr" }
+    { name = "anmakaro", email = "anmakaro@student.42prague.com" }
 ]
 readme = "README.md"
 license = { file = "LICENSE" }
-requires-python = ">=3.6"
+requires-python = ">=3.10"
 keywords = ["example", "package", "exercise"]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -20,4 +20,4 @@ classifiers = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/eagle/ft_package"
+Homepage = "https://github.com/OnnaMcadva/P_Python_for_Data_Science/tree/main/00%20-%20Starting/ex09"
