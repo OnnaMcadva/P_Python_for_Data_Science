@@ -5,22 +5,9 @@ Garlic = float("NaN")
 Zero = 0
 Empty = ''
 Fake = False
-Normal = "Brian"
-
-tests = [
-    (Nothing, "Nothing"),
-    (Garlic, "Cheese"),
-    (Zero, "Zero"),
-    (Empty, "Empty"),
-    (Fake, "Fake"),
-    (Normal, None),
-]
-
-overall_result = 0
-
-for obj, name in tests:
-    result = NULL_not_found(obj)
-    if result != 0:
-        overall_result = 1
-
-print(overall_result)
+NULL_not_found(Nothing)
+NULL_not_found(Garlic)
+NULL_not_found(Zero)
+NULL_not_found(Empty)
+NULL_not_found(Fake)
+print(NULL_not_found("Brian"))
