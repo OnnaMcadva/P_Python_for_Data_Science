@@ -10,26 +10,16 @@ def is_integer(s):
         return False
 
 
-def main():
-    try:
-        if len(sys.argv) == 1:
-            return
-
-        if len(sys.argv) > 2:
-            raise AssertionError("more than one argument is provided🪄")
-
-        if not is_integer(sys.argv[1]):
-            raise AssertionError("argument is not an integer🪄")
-
+try:
+    if len(sys.argv) == 1:
+        exit()
+    elif len(sys.argv) > 2:
+        raise AssertionError("more than one argument is provided🪄")
+    elif not is_integer(sys.argv[1]):
+        raise AssertionError("argument is not an integer🪄")
+    else:
         number = int(sys.argv[1])
-        if number % 2 == 0:
-            print("🦄 I'm Even.")
-        else:
-            print("🐳 I'm Odd.")
+        print("🦄 I'm Even." if number % 2 == 0 else "🐳 I'm Odd.")
 
-    except AssertionError as e:
-        print(f"🪄 AssertionError: {e}")
-
-
-if __name__ == "__main__":
-    main()
+except AssertionError as e:
+    print(f"🪄 AssertionError: {e}")
