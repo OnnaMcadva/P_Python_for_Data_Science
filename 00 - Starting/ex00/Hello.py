@@ -17,31 +17,35 @@ try:
         ft_list[1] = "World!"
     else:
         print("List index 1 not found.")
-except Exception as e:
+except IndexError as e:
     print(f"Error modifying list: {e}")
 
 try:
     ft_tuple = (ft_tuple[0], "France!")
-except Exception as e:
-    print(f"Error modifying tuple: {e}")
+except IndexError as e:
+    print(f"Error creating new tuple: {e}")
 
 try:
     if "tutu!" in ft_set:
         ft_set.remove("tutu!")
     else:
         print("Value 'tutu!' not found in set.")
-except Exception as e:
+except KeyError as e:
     print(f"Error removing from set: {e}")
+except TypeError as e:
+    print(f"Invalid value type: {e}")
 
 try:
     ft_set.add("Paris!")
-except Exception as e:
+except TypeError as e:
     print(f"Error adding to set: {e}")
 
 try:
     ft_dict["Hello"] = "42Paris!"
-except Exception as e:
-    print(f"Error modifying dict: {e}")
+except KeyError as e:
+    print(f"Key not found: {e}")
+except TypeError as e:
+    print(f"Invalid key type: {e}")
 
 print(ft_list)
 print(ft_tuple)
