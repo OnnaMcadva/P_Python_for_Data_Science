@@ -33,6 +33,8 @@ def slice_me(family: list, start: int, end: int) -> list:
     if not all(len(row) == first_len for row in family):
         raise ValueError("All rows must have the same number of columns")
 
+    print("* 📚 *")
+
     arr = np.array(family)
     print(f"My shape is : {arr.shape}")
 

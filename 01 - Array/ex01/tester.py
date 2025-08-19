@@ -13,15 +13,17 @@ def main():
     print(slice_me(family, 0, 2))
     print(slice_me(family, 1, -2))
 
+    print("\nTesting error cases...\n")
+
     try:
         slice_me("not a list", 0, 1)
     except ValueError as e:
-        print(f"Caught error: {e}")
+        print(f"🐬 Caught error: {e}")
 
     try:
         slice_me([[1, 2], [3]], 0, 1)
     except ValueError as e:
-        print(f"Caught error: {e}")
+        print(f"🐬 Caught error: {e}")
 
 
 if __name__ == "__main__":
