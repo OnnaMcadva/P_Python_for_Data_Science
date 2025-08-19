@@ -4,16 +4,17 @@ import numpy as np
 def give_bmi(
         height: list[int | float],
         weight: list[int | float]
-) -> list[float]:
+) -> list[int | float]:
     """
     Calculate the Body Mass Index (BMI) for given lists of heights and weights.
+    Calculate BMI with comprehensive error handling.
 
     Args:
         height (list[int | float]): List of heights in meters.
         weight (list[int | float]): List of weights in kilograms.
 
     Returns:
-        list[float]: List of calculated BMI values.
+        list[int | float]: List of calculated BMI values.
 
     Raises:
         ValueError: If inputs are not lists of int/float or if sizes mismatch.
@@ -24,13 +25,16 @@ def give_bmi(
     if len(height) != len(weight):
         raise ValueError("Height and weight lists must be the same length.")
 
+    if len(height) == 0 or len(weight) == 0:
+        raise ValueError("Lists cannot be empty.")
+
     for h, w in zip(height, weight):
         if not isinstance(h, (int, float)) or not isinstance(w, (int, float)):
             raise ValueError(
                 "Height and weight must contain only int or float values."
             )
-        if h <= 0:
-            raise ValueError("Height must be greater than 0.")
+        if h <= 0 or w <= 0:
+            raise ValueError("Height/weight must be greater than 0.")
 
     height_arr = np.array(height, dtype=float)
     weight_arr = np.array(weight, dtype=float)
@@ -62,18 +66,7 @@ def apply_limit(bmi: list[int | float], limit: int) -> list[bool]:
     for val in bmi:
         if not isinstance(val, (int, float)):
             raise ValueError("BMI list must contain only int or float values.")
+        if val <= 0:
+            raise ValueError("BMI values must be greater than 0.")
 
     return [val > limit for val in bmi]
-
-
-def main():
-    """Test function for give_bmi and apply_limit."""
-    height = [2.71, 1.15]
-    weight = [165.3, 38.4]
-    bmi = give_bmi(height, weight)
-    print(bmi, type(bmi))
-    print(apply_limit(bmi, 26))
-
-
-if __name__ == "__main__":
-    main()
