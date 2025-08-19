@@ -1,7 +1,10 @@
 import numpy as np
 
 
-def give_bmi(height: list[int | float], weight: list[int | float]) -> list[float]:
+def give_bmi(
+        height: list[int | float],
+        weight: list[int | float]
+) -> list[float]:
     """
     Calculate the Body Mass Index (BMI) for given lists of heights and weights.
 
@@ -23,7 +26,9 @@ def give_bmi(height: list[int | float], weight: list[int | float]) -> list[float
 
     for h, w in zip(height, weight):
         if not isinstance(h, (int, float)) or not isinstance(w, (int, float)):
-            raise ValueError("Height and weight must contain only int or float values.")
+            raise ValueError(
+                "Height and weight must contain only int or float values."
+            )
         if h <= 0:
             raise ValueError("Height must be greater than 0.")
 
@@ -43,7 +48,7 @@ def apply_limit(bmi: list[int | float], limit: int) -> list[bool]:
         limit (int): Threshold value to compare against.
 
     Returns:
-        list[bool]: List of booleans (True if BMI above limit, False otherwise).
+        list[bool]: List of booleans (True if BMI above limit,False otherwise).
 
     Raises:
         ValueError: If bmi is not a list of int/float or limit is not an int.
