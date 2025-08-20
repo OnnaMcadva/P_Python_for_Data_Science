@@ -5,19 +5,25 @@ import os
 
 def ft_load(path: str) -> np.array:
     """
-    Load an image, print its format and return pixels in RGB format.
+    Load an image from the given path, print its format, and return
+    the pixel data as an RGB NumPy array.
+
+    Notes:
+        - Full support is guaranteed for JPG and JPEG formats.
+        - Other formats (e.g., PNG, BMP, TIFF) may work,
+          but are not officially required by this function.
 
     Args:
-        path (str): Path to the image file
+        path (str): Path to the image file.
 
     Returns:
-        np.array: Image array in RGB format
+        np.ndarray: Image pixel data in RGB format.
 
     Raises:
-        FileNotFoundError: If file doesn't exist
-        ValueError: If file format is not supported or
-        image cannot be processed
-        Exception: For other unexpected errors
+        FileNotFoundError: If the file does not exist.
+        ValueError: If the path is not a file, or the image format
+                    is unsupported, or the image cannot be processed.
+        Exception: For any other unexpected errors.
     """
     try:
         if not os.path.exists(path):
