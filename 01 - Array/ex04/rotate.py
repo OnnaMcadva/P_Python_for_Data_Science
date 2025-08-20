@@ -85,7 +85,9 @@ def print_pixel_sample(image_arr, sample_size=3):
         print("Pixel content sample (first few pixels):")
 
         if len(image_arr.shape) == 3:
-            flat_sample = image_arr[:sample_size, :sample_size, :].reshape(-1, image_arr.shape[2])
+            flat_sample = image_arr[
+                :sample_size, :sample_size, :
+            ].reshape(-1, image_arr.shape[2])
             for i, pixel in enumerate(flat_sample[:sample_size*2]):
                 print(f"  {pixel}")
         else:
