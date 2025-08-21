@@ -1,179 +1,122 @@
 #!/usr/bin/env python3
 import numpy as np
-from load_image import load_image, image_to_array, crop_square_center
 import matplotlib.pyplot as plt
+from load_image import ft_load
 
 
-def manual_transpose(image_arr):
+def crop_square_center(image_arr: np.ndarray, size=400) -> np.ndarray:
     """
-    Manual transpose implementation without using libraries
+    Crop a square from the center of the image.
 
     Args:
-        image_array (numpy.ndarray): Input image array
+        image_arr (np.ndarray): Input image array
+        size (int): Size of the square crop
 
     Returns:
-        numpy.ndarray: Transposed image array
+        np.ndarray: Cropped square image
+    """
+    try:
+        if image_arr is None:
+            raise ValueError("Cannot crop None image array")
+
+        if not isinstance(image_arr, np.ndarray):
+            raise ValueError("Input must be a numpy array")
+
+        if len(image_arr.shape) != 3 or image_arr.shape[2] != 3:
+            raise ValueError("Image must have 3 channels (RGB)")
+
+        h, w, _ = image_arr.shape
+        if size > min(h, w):
+            raise ValueError(
+                f"Crop size {size} is larger than image dimensions {h}x{w}"
+            )
+
+        start_y = (h - size) // 2
+        start_x = (w - size) // 2
+        return image_arr[start_y:start_y+size, start_x:start_x+size, :]
+
+    except Exception as e:
+        raise ValueError(f"Error cropping image: {e}")
+
+
+def to_grayscale(image_arr: np.ndarray) -> np.ndarray:
+    """
+    Convert RGB image array to grayscale (1 channel).
+    """
+    try:
+        if image_arr is None:
+            raise ValueError("Cannot convert None image to grayscale")
+
+        if not isinstance(image_arr, np.ndarray):
+            raise ValueError("Input must be a numpy array")
+
+        if len(image_arr.shape) != 3 or image_arr.shape[2] != 3:
+            raise ValueError("Input must have 3 channels (RGB)")
+
+        gray = np.mean(image_arr, axis=2).astype(np.uint8)
+        return gray.reshape(gray.shape[0], gray.shape[1], 1)
+
+    except Exception as e:
+        raise ValueError(f"Error converting to grayscale: {e}")
+
+
+def manual_transpose(image_arr: np.ndarray) -> np.ndarray:
+    """
+    Manually transpose the image array without numpy.transpose.
     """
     try:
         if image_arr is None:
             raise ValueError("Cannot transpose None image array")
 
-        if len(image_arr.shape) == 2:
-            height, width = image_arr.shape
-            transp = np.empty((width, height), dtype=image_arr.dtype)
+        if not isinstance(image_arr, np.ndarray):
+            raise ValueError("Input must be a numpy array")
 
-            for i in range(height):
-                for j in range(width):
-                    transp[j, i] = image_arr[i, j]
+        if len(image_arr.shape) != 3 or image_arr.shape[2] != 1:
+            raise ValueError("Input must be grayscale (H, W, 1)")
 
-        elif len(image_arr.shape) == 3:
-            height, width, channels = image_arr.shape
-            transp = np.empty((width, height, channels), dtype=image_arr.dtype)
+        h, w, c = image_arr.shape
+        transposed = np.zeros((w, h, c), dtype=image_arr.dtype)
+        for i in range(h):
+            for j in range(w):
+                transposed[j, i] = image_arr[i, j]
 
-            for i in range(height):
-                for j in range(width):
-                    for c in range(channels):
-                        transp[j, i, c] = image_arr[i, j, c]
-        else:
-            raise ValueError(f"Unsupported image shape: {image_arr.shape}")
-
-        return transp
+        return transposed
 
     except Exception as e:
-        print(f"Error in manual transpose: {e}")
-        return None
-
-
-def print_image_info(image_arr, title="Image"):
-    """
-    Print information about the image array
-
-    Args:
-        image_array (numpy.ndarray): Image array to analyze
-        title (str): Title for the printout
-    """
-    try:
-        if image_arr is None:
-            raise ValueError("Cannot get info from None image array")
-
-        print(f"\n=== {title.upper()} INFORMATION ===")
-        print(f"The shape of image is: {image_arr.shape}")
-
-        if len(image_arr.shape) == 3:
-            print(f"Number of channels: {image_arr.shape[2]}")
-        else:
-            print("Number of channels: 1")
-
-        print(f"Data type: {image_arr.dtype}")
-
-    except Exception as e:
-        print(f"Error printing image info: {e}")
-
-
-def print_pixel_sample(image_arr, sample_size=3):
-    """
-    Print a sample of pixel content from the image
-
-    Args:
-        image_array (numpy.ndarray): Image array
-        sample_size (int): Number of pixels to sample from beginning
-    """
-    try:
-        if image_arr is None:
-            raise ValueError("Cannot print pixl content from None image array")
-
-        print("Pixel content sample (first few pixels):")
-
-        if len(image_arr.shape) == 3:
-            flat_sample = image_arr[
-                :sample_size, :sample_size, :
-            ].reshape(-1, image_arr.shape[2])
-            for i, pixel in enumerate(flat_sample[:sample_size*2]):
-                print(f"  {pixel}")
-        else:
-            flat_sample = image_arr[:sample_size, :sample_size].flatten()
-            for i, pixel in enumerate(flat_sample[:sample_size*2]):
-                print(f"  [{pixel}]")
-
-        print("  ...")
-
-    except Exception as e:
-        print(f"Error printing pixel sample: {e}")
-
-
-def display_image(image_array, title="Image"):
-    """
-    Display the image using matplotlib
-
-    Args:
-        image_array (numpy.ndarray): Image array to display
-        title (str): Title for the plot
-    """
-    try:
-        if image_array is None:
-            raise ValueError("Cannot display None image array")
-
-        plt.figure(figsize=(8, 6))
-
-        if len(image_array.shape) == 3:
-            plt.imshow(image_array)
-        else:
-            plt.imshow(image_array, cmap='gray')
-
-        plt.title(title)
-        plt.xlabel('X Axis')
-        plt.ylabel('Y Axis')
-        plt.colorbar(label='Intensity')
-        plt.show()
-
-    except Exception as e:
-        print(f"Error displaying image: {e}")
+        raise ValueError(f"Error in manual transpose: {e}")
 
 
 def main():
     """
-    Main function to execute the rotate program
+    Main function for the rotate exercise.
     """
     try:
-        image_path = "animal.jpeg"
-        print(f"Loading image: {image_path}")
+        img = ft_load("samorost.jpg")
 
-        pil_image = load_image(image_path)
-        if pil_image is None:
-            return
+        cropped = crop_square_center(img, 400)
+        gray = to_grayscale(cropped)
 
-        image_array = image_to_array(pil_image)
-        if image_array is None:
-            return
+        print(f"The shape of image is: {gray.shape}")
+        print(gray)
 
-        print("\nCropping square from center...")
-        cropped_image = crop_square_center(image_array, size=400)
-        if cropped_image is None:
-            return
+        transposed = manual_transpose(gray)
+        transposed = transposed.reshape(
+            transposed.shape[0], transposed.shape[1]
+            )
 
-        print_image_info(cropped_image, "Cropped Square")
-        print_pixel_sample(cropped_image)
+        print(f"New shape after Transpose: {transposed.shape}")
+        print(transposed)
 
-        print("\nDisplaying cropped square image...")
-        display_image(cropped_image, "Cropped Square Image")
-
-        print("\nPerforming manual transpose...")
-        transposed_image = manual_transpose(cropped_image)
-        if transposed_image is None:
-            return
-
-        print_image_info(transposed_image, "Transposed")
-        print_pixel_sample(transposed_image)
-
-        print("\nDisplaying transposed image...")
-        display_image(transposed_image, "Transposed Image")
-
-        print("\nProgram completed successfully!")
+        plt.imshow(transposed, cmap="gray")
+        plt.title("Transposed Image")
+        plt.xlabel("X-axis (pixels)")
+        plt.ylabel("Y-axis (pixels)")
+        plt.show()
 
     except KeyboardInterrupt:
         print("\nProgram interrupted by user")
     except Exception as e:
-        print(f"Unexpected error in main program: {e}")
+        print(f"Unexpected error: {e}")
 
 
 if __name__ == "__main__":

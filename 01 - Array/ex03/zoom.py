@@ -40,5 +40,7 @@ if __name__ == "__main__":
         plt.ylabel("Y-axis (pixels)")
         plt.show()
 
+    except KeyboardInterrupt:
+        print("\nProgram interrupted by user")
     except Exception as e:
-        print(e)
+        print(f"Unexpected error: {e}")
