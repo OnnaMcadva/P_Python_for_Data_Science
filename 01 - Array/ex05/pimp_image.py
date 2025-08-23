@@ -107,7 +107,7 @@ def main():
     try:
         from load_image import ft_load
 
-        img = ft_load("samorost.jpg")
+        img = ft_load("Sergi.jpg")
 
         _display(img, "Original Image")
 

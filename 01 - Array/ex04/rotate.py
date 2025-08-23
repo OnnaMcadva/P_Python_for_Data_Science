@@ -4,65 +4,66 @@ import matplotlib.pyplot as plt
 from load_image import ft_load
 
 
-def crop_square_center(image_arr: np.ndarray, size=400) -> np.ndarray:
+def crop_center_square(
+    img: np.ndarray, size: int = 400, channel: int | None = None
+) -> np.ndarray:
     """
-    Crop a square from the center of the image.
+    Crop a square region from the center of the image.
 
     Args:
-        image_arr (np.ndarray): Input image array
-        size (int): Size of the square crop
+        img (np.ndarray): Input image array (H, W, C).
+        size (int): Size of the square to crop. Must be <= min(H, W).
+        channel (int | None): If specified, selects a single channel
+                                (0=R, 1=G, 2=B).
+                              If None, keeps all channels.
 
     Returns:
-        np.ndarray: Cropped square image
+        np.ndarray: Cropped square image (H, W, C) or (H, W) if channel is set.
+
+    Raises:
+        ValueError: If input is invalid or size is too large.
     """
     try:
-        if image_arr is None:
-            raise ValueError("Cannot crop None image array")
+        if img is None:
+            raise ValueError("Input image is None.")
 
-        if not isinstance(image_arr, np.ndarray):
-            raise ValueError("Input must be a numpy array")
+        if not isinstance(img, np.ndarray):
+            raise ValueError("Input must be a numpy array.")
 
-        if len(image_arr.shape) != 3 or image_arr.shape[2] != 3:
-            raise ValueError("Image must have 3 channels (RGB)")
+        if img.ndim != 3 or img.shape[2] != 3:
+            raise ValueError("Image must have shape (H, W, 3).")
 
-        h, w, _ = image_arr.shape
+        h, w, _ = img.shape
         if size > min(h, w):
             raise ValueError(
-                f"Crop size {size} is larger than image dimensions {h}x{w}"
+                f"Crop size {size} exceeds image dimensions {h}x{w}."
             )
 
         start_y = (h - size) // 2
         start_x = (w - size) // 2
-        return image_arr[start_y:start_y+size, start_x:start_x+size, :]
+        cropped = img[start_y:start_y+size, start_x:start_x+size, :]
+
+        if channel is not None:
+            if channel not in (0, 1, 2):
+                raise ValueError("Channel must be 0, 1, or 2.")
+            cropped = cropped[:, :, channel]
+
+        return cropped
 
     except Exception as e:
         raise ValueError(f"Error cropping image: {e}")
 
 
-def to_grayscale(image_arr: np.ndarray) -> np.ndarray:
-    """
-    Convert RGB image array to grayscale (1 channel).
-    """
-    try:
-        if image_arr is None:
-            raise ValueError("Cannot convert None image to grayscale")
-
-        if not isinstance(image_arr, np.ndarray):
-            raise ValueError("Input must be a numpy array")
-
-        if len(image_arr.shape) != 3 or image_arr.shape[2] != 3:
-            raise ValueError("Input must have 3 channels (RGB)")
-
-        gray = np.mean(image_arr, axis=2).astype(np.uint8)
-        return gray.reshape(gray.shape[0], gray.shape[1], 1)
-
-    except Exception as e:
-        raise ValueError(f"Error converting to grayscale: {e}")
-
-
 def manual_transpose(image_arr: np.ndarray) -> np.ndarray:
     """
-    Manually transpose the image array without numpy.transpose.
+    Manually transpose a grayscale image without numpy.transpose.
+
+    Supports input shapes:
+      - (H, W)      -> returns (W, H)
+      - (H, W, 1)   -> returns (W, H)
+
+    Raises:
+        ValueError: if input is invalid.
     """
     try:
         if image_arr is None:
@@ -71,44 +72,45 @@ def manual_transpose(image_arr: np.ndarray) -> np.ndarray:
         if not isinstance(image_arr, np.ndarray):
             raise ValueError("Input must be a numpy array")
 
-        if len(image_arr.shape) != 3 or image_arr.shape[2] != 1:
-            raise ValueError("Input must be grayscale (H, W, 1)")
+        if image_arr.ndim == 2:
+            src = image_arr
+        elif image_arr.ndim == 3 and image_arr.shape[2] == 1:
+            src = image_arr[:, :, 0]
+        else:
+            raise ValueError("Input must be 2D (H, W) or (H, W, 1) grayscale")
 
-        h, w, c = image_arr.shape
-        transposed = np.zeros((w, h, c), dtype=image_arr.dtype)
+        h, w = src.shape
+        out = np.zeros((w, h), dtype=src.dtype)
+
         for i in range(h):
             for j in range(w):
-                transposed[j, i] = image_arr[i, j]
+                out[j, i] = src[i, j]
 
-        return transposed
+        return out
 
     except Exception as e:
         raise ValueError(f"Error in manual transpose: {e}")
 
 
-def main():
+def main() -> None:
     """
     Main function for the rotate exercise.
+    Loads the image, crops center 400x400 (single channel), prints arrays,
+    transposes manually, and displays the result.
     """
     try:
         img = ft_load("samorost.jpg")
 
-        cropped = crop_square_center(img, 400)
-        gray = to_grayscale(cropped)
+        cropped = crop_center_square(img, size=400, channel=0)
+        print(f"The zoomed shape of image is: {cropped.shape}")
+        print(cropped)
 
-        print(f"The shape of image is: {gray.shape}")
-        print(gray)
-
-        transposed = manual_transpose(gray)
-        transposed = transposed.reshape(
-            transposed.shape[0], transposed.shape[1]
-            )
-
+        transposed = manual_transpose(cropped)
         print(f"New shape after Transpose: {transposed.shape}")
         print(transposed)
 
         plt.imshow(transposed, cmap="gray")
-        plt.title("Transposed Image")
+        plt.title("Zoomed and Transposed Image 😺")
         plt.xlabel("X-axis (pixels)")
         plt.ylabel("Y-axis (pixels)")
         plt.show()
