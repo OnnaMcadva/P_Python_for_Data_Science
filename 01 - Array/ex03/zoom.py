@@ -35,7 +35,7 @@ if __name__ == "__main__":
         zoomed = zoom_image(img)
 
         plt.imshow(zoomed, cmap="gray")
-        plt.title("Zoomed Image (Red channel)")
+        plt.title("Zoomed Image 😺")
         plt.xlabel("X-axis (pixels)")
         plt.ylabel("Y-axis (pixels)")
         plt.show()
