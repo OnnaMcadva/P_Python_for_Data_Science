@@ -167,7 +167,7 @@ def main():
     try:
         from load_image import ft_load
 
-        img = ft_load("samorost.jpg")
+        img = ft_load("Sergi.jpg")
         print(img)
 
         _display(img, "Original Image")
@@ -178,7 +178,8 @@ def main():
         ft_blue(img)
         ft_grey(img)
         ft_sepia_light(img)
-        ft_neon(img)
+        neon_img = ft_neon(img)
+        plt.imsave("neon_image.png", neon_img)
 
         print(ft_invert.__doc__)
 
