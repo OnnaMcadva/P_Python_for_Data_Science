@@ -27,7 +27,7 @@ def ft_invert(array: np.ndarray) -> np.ndarray:
     try:
         _validate_image(array)
         inverted = 255 - array
-        _display(inverted, "Inverted Image")
+        _display(inverted, "Inverted Image", fig_num=2)
         return inverted
     except Exception as e:
         raise ValueError(f"Error in ft_invert: {e}")
@@ -41,7 +41,7 @@ def ft_red(array: np.ndarray) -> np.ndarray:
         _validate_image(array)
         red = np.zeros_like(array)
         red[:, :, 0] = array[:, :, 0] * 1
-        _display(red, "Red Filter")
+        _display(red, "Red Filter", fig_num=3)
         return red
     except Exception as e:
         raise ValueError(f"Error in ft_red: {e}")
@@ -55,7 +55,7 @@ def ft_green(array: np.ndarray) -> np.ndarray:
         _validate_image(array)
         green = np.zeros_like(array)
         green[:, :, 1] = array[:, :, 1] - 0
-        _display(green, "Green Filter")
+        _display(green, "Green Filter", fig_num=4)
         return green
     except Exception as e:
         raise ValueError(f"Error in ft_green: {e}")
@@ -69,7 +69,7 @@ def ft_blue(array: np.ndarray) -> np.ndarray:
         _validate_image(array)
         blue = np.zeros_like(array)
         blue[:, :, 2] = array[:, :, 2]
-        _display(blue, "Blue Filter")
+        _display(blue, "Blue Filter", fig_num=5)
         return blue
     except Exception as e:
         raise ValueError(f"Error in ft_blue: {e}")
@@ -92,7 +92,7 @@ def ft_grey(array: np.ndarray) -> np.ndarray:
         grey[:, :, 1] = grey_values
         grey[:, :, 2] = grey_values
 
-        _display(grey, "Grey Filter")
+        _display(grey, "Grey Filter", fig_num=6)
         return grey
     except Exception as e:
         raise ValueError(f"Error in ft_grey: {e}")
@@ -116,7 +116,7 @@ def ft_sepia_light(array: np.ndarray) -> np.ndarray:
 
         sepia = sepia.astype(np.uint8)
 
-        _display(sepia, "Sepia Light Filter")
+        _display(sepia, "Sepia Light Filter", fig_num=7)
         return sepia
 
     except Exception as e:
@@ -143,21 +143,22 @@ def ft_neon(array: np.ndarray) -> np.ndarray:
         neon = 0.5 * array.astype(np.float32) + 0.5 * gradient
         neon = np.clip(neon, 0, 255).astype(np.uint8)
 
-        _display(neon, "Neon Overlay")
+        _display(neon, "Neon Overlay", fig_num=8)
         return neon
 
     except Exception as e:
         raise ValueError(f"Error in ft_neon: {e}")
 
 
-def _display(image: np.ndarray, title: str) -> None:
+def _display(image: np.ndarray, title: str, fig_num=None) -> None:
     """
     Display the image using matplotlib.
     """
+    plt.figure(fig_num)
     plt.imshow(image)
     plt.title(title)
     plt.axis("off")
-    plt.show()
+    plt.show(block=False)
 
 
 def main():
@@ -167,10 +168,10 @@ def main():
     try:
         from load_image import ft_load
 
-        img = ft_load("Sergi.jpg")
+        img = ft_load("samorost.jpg")
         print(img)
 
-        _display(img, "Original Image")
+        _display(img, "Original Image", fig_num=1)
 
         ft_invert(img)
         ft_red(img)
@@ -182,6 +183,7 @@ def main():
         plt.imsave("neon_image.png", neon_img)
 
         print(ft_invert.__doc__)
+        plt.show()
 
     except Exception as e:
         print(f"Unexpected error in main: {e}")
