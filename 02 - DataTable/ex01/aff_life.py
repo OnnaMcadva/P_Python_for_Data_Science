@@ -1,8 +1,7 @@
-"""Plot life expectancy over time for a given country (campus country)."""
-from __future__ import annotations
-
+"""Plot life expectancy over time for a given country."""
+import sys
 from typing import Iterable, Optional
-
+import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -26,15 +25,17 @@ def _country_series(df: pd.DataFrame, country: str) -> Optional[pd.Series]:
     """Return a time series for the given country with year index as int."""
     if "country" not in df.columns:
         return None
-    # Case-insensitive match with support for common synonyms
-    aliases = {
-        "czech republic": "czech republic",
-        "czechia": "czech republic",
-        "united states": "united states",
-        "united states of america": "united states",
-    }
-    key = aliases.get(country.strip().lower(), country.strip().lower())
+    # aliases = {
+    #     "czech republic": "czech republic",
+    #     "czechia": "czech republic",
+    #     "united states": "united states",
+    #     "united states of america": "united states",
+    #     "spain": "spain",
+    #     "france": "france",
+    # }
+    # key = aliases.get(country.strip().lower(), country.strip().lower())
 
+    key = country.strip().lower()
     row = df[df["country"].str.strip().str.lower() == key]
     if row.empty:
         return None
@@ -44,23 +45,25 @@ def _country_series(df: pd.DataFrame, country: str) -> Optional[pd.Series]:
         return None
 
     series = row.iloc[0][list(map(str, years))]
-    # Convert to numeric and drop missing values
     series = pd.to_numeric(series, errors="coerce")
     series.index = years
     series = series.dropna()
     return series
 
 
-def aff_life(country: str = "Czechia") -> bool:
+def aff_life(
+        country: str = "Spain",
+        filename: str = "life_expectancy_years.csv") -> bool:
     """Load dataset and display life expectancy curve for a country.
 
     Args:
-        country: Country name to plot (default: "Czechia").
+        country: Country name to plot (default: "Spain").
+        filename: Path to the CSV file (default: "life_expectancy_years.csv").
 
     Returns:
         True on success, False if the operation couldn't be completed.
     """
-    df = load("life_expectancy_years.csv")
+    df = load(filename)
     if df is None:
         return False
 
@@ -70,7 +73,7 @@ def aff_life(country: str = "Czechia") -> bool:
         return False
 
     plt.figure()
-    plt.plot(s.index, s.values, label=country)
+    plt.plot(np.array(s.index), np.array(s.values), label=country)
     plt.title(f"Life expectancy in {country}")
     plt.xlabel("Year")
     plt.ylabel("Life expectancy (years)")
@@ -82,9 +85,10 @@ def aff_life(country: str = "Czechia") -> bool:
 
 
 def main() -> None:
-    # Choose your campus country here; change if needed.
-    # Default set to Czechia to match Prague timezone.
-    _ = aff_life("Czechia")  # Try "Czech Republic" if your CSV uses that name.
+    try:
+        _ = aff_life("Spain")
+    except Exception as exc:  # noqa: BLE001
+        print(f"Unexpected error during test: {exc}", file=sys.stderr)
 
 
 if __name__ == "__main__":

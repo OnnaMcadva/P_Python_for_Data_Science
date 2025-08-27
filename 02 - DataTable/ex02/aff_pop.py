@@ -1,8 +1,7 @@
-"""Compare population over time for two countries (1800–2050)."""
-from __future__ import annotations
-
+"""Compare population over time for two countries (1800-2050)."""
+import sys
 from typing import Iterable, Optional
-
+import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -23,27 +22,61 @@ def _years_from_columns(columns: Iterable[str]) -> list[int]:
 def _country_series(df: pd.DataFrame, country: str) -> Optional[pd.Series]:
     if "country" not in df.columns:
         return None
-    aliases = {
-        "czech republic": "czech republic",
-        "czechia": "czech republic",
-        "united states": "united states",
-        "united states of america": "united states",
-    }
-    key = aliases.get(country.strip().lower(), country.strip().lower())
+
+    key = country.strip().lower()
     row = df[df["country"].str.strip().str.lower() == key]
     if row.empty:
         return None
+
     years = _years_from_columns(df.columns)
     if not years:
         return None
+
+    def _parse_number(val: str) -> float:
+        if isinstance(val, str):
+            val = val.strip()
+            if val.endswith("M"):
+                return float(val[:-1]) * 1e6
+            elif val.endswith("k"):
+                return float(val[:-1]) * 1e3
+            else:
+                return float(val.replace(",", "")) if val else float("nan")
+        return float(val)
+
     series = row.iloc[0][list(map(str, years))]
-    series = pd.to_numeric(series, errors="coerce")
+    series = series.apply(_parse_number)
     series.index = years
     series = series.dropna()
     return series
 
 
-def aff_pop(country1: str = "Czechia", country2: str = "France") -> bool:
+# def _country_series(df: pd.DataFrame, country: str) -> Optional[pd.Series]:
+#     if "country" not in df.columns:
+#         return None
+#     # aliases = {
+#     #     "czech republic": "czech republic",
+#     #     "czechia": "czech republic",
+#     #     "united states": "united states",
+#     #     "united states of america": "united states",
+#     # }
+#     # key = aliases.get(country.strip().lower(), country.strip().lower())
+
+#     key = country.strip().lower()
+#     row = df[df["country"].str.strip().str.lower() == key]
+#     if row.empty:
+#         return None
+#     years = _years_from_columns(df.columns)
+#     if not years:
+#         return None
+
+#     series = row.iloc[0][list(map(str, years))]
+#     series = pd.to_numeric(series, errors="coerce")
+#     series.index = years
+#     series = series.dropna()
+#     return series
+
+
+def aff_pop(country1: str = "Spain", country2: str = "France") -> bool:
     """Plot population of two countries between 1800 and 2050.
 
     Args:
@@ -66,15 +99,16 @@ def aff_pop(country1: str = "Czechia", country2: str = "France") -> bool:
         print(f"Error: country '{country2}' not found or has no data.")
         return False
 
-    # Limit to years 1800..2050 (inclusive) if available
     start, end = 1800, 2050
     s1 = s1[(s1.index >= start) & (s1.index <= end)]
     s2 = s2[(s2.index >= start) & (s2.index <= end)]
 
     plt.figure()
-    plt.plot(s1.index, s1.values, label=country1)
-    plt.plot(s2.index, s2.values, label=country2)
-    plt.title(f"Population: {country1} vs {country2} (1800–2050)")
+    plt.plot(np.array(s1.index), np.array(s1.values), label=country1)
+    plt.plot(np.array(s2.index), np.array(s2.values), label=country2)
+    # plt.plot(s1.index, s1.values, label=country1)
+    # plt.plot(s2.index, s2.values, label=country2)
+    plt.title(f"Population: {country1} vs {country2} (1800-2050)")
     plt.xlabel("Year")
     plt.ylabel("Population (people)")
     plt.legend()
@@ -85,7 +119,10 @@ def aff_pop(country1: str = "Czechia", country2: str = "France") -> bool:
 
 
 def main() -> None:
-    _ = aff_pop("Czechia", "France")
+    try:
+        _ = aff_pop("Spain", "France")
+    except Exception as exc:  # noqa: BLE001
+        print(f"Unexpected error during test: {exc}", file=sys.stderr)
 
 
 if __name__ == "__main__":

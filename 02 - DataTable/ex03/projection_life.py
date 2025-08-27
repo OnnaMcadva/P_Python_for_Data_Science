@@ -1,5 +1,4 @@
 """Scatter plot: life expectancy vs GDP per capita (PPP) for year 1900."""
-from __future__ import annotations
 
 from typing import Optional
 

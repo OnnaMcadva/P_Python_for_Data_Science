@@ -5,11 +5,7 @@
 - Prints the dataset dimensions exactly as required and returns the DataFrame.
 - Returns None on any failure.
 """
-from __future__ import annotations
-
-import sys
 from typing import Optional
-
 import pandas as pd
 
 
@@ -44,23 +40,19 @@ def load(path: str) -> Optional[pd.DataFrame]:
         print(f"Error: {exc}")
         return None
 
+    if "country" not in df.columns:
+        print("Error: CSV missing 'country' column.")
+        return None
+
+    year_columns = [c for c in df.columns if c.isdigit()]
+    if not year_columns:
+        print("Error: CSV has no numeric year columns.")
+        return None
+
+    if df.empty:
+        print("Error: CSV file is empty.")
+        return None
+
     rows, cols = df.shape
     print(f"Loading dataset of dimensions ({rows}, {cols})")
     return df
-
-
-def main() -> None:
-    """Basic smoke tests with safe error handling.
-
-    These are only examples and won't raise if files are missing.
-    """
-    try:
-        # Example smoke test; safe if file doesn't exist.
-        _ = load("life_expectancy_years.csv")
-    except Exception as exc:  # noqa: BLE001
-        # Defensive programming: never crash.
-        print(f"Unexpected error during test: {exc}", file=sys.stderr)
-
-
-if __name__ == "__main__":
-    main()
