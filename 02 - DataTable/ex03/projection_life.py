@@ -1,5 +1,5 @@
 """Scatter plot: life expectancy vs GDP per capita (PPP) for year 1900."""
-
+import sys
 from typing import Optional
 
 import matplotlib.pyplot as plt
@@ -61,7 +61,7 @@ def projection_life(year: int = 1900) -> bool:
     plt.title(f"Life expectancy vs GDP per capita (PPP), {year}")
     plt.xlabel("GDP per capita (PPP, inflation-adjusted)")
     plt.ylabel("Life expectancy (years)")
-    plt.xscale("log")  # Common for GDP distributions; improves readability
+    plt.xscale("log")
     plt.grid(True, which="both", linestyle="--", linewidth=0.5)
     plt.legend()
     plt.tight_layout()
@@ -70,7 +70,10 @@ def projection_life(year: int = 1900) -> bool:
 
 
 def main() -> None:
-    _ = projection_life(1900)
+    try:
+        _ = projection_life(1900)
+    except Exception as exc:  # noqa: BLE001
+        print(f"Unexpected error during test: {exc}", file=sys.stderr)
 
 
 if __name__ == "__main__":
