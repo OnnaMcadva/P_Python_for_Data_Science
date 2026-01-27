@@ -131,6 +131,45 @@ def main():
 if __name__ == "__main__":
     main()
 
+# Additional edge-case tests
+print("\n" + "=" * 50)
+print("TEST 21: Non-numeric input")
+print("=" * 50)
+try:
+    ft_statistics(1, "a", 3, test="mean")
+except Exception as e:
+    print("Exception:", e)
+
+print("\n" + "=" * 50)
+print("TEST 22: Infinite and NaN values")
+print("=" * 50)
+try:
+    ft_statistics(float('inf'), 1, 2, test="mean")
+    ft_statistics(float('-inf'), 1, 2, test="mean")
+    ft_statistics(float('nan'), 1, 2, test="mean")
+except Exception as e:
+    print("Exception:", e)
+
+print("\n" + "=" * 50)
+print("TEST 23: Empty input")
+print("=" * 50)
+ft_statistics()
+
+print("\n" + "=" * 50)
+print("TEST 24: Only one element")
+print("=" * 50)
+ft_statistics(42, test="std", test2="var")
+
+print("\n" + "=" * 50)
+print("TEST 25: Very large dataset")
+print("=" * 50)
+ft_statistics(*range(100000), test="mean")
+
+print("\n" + "=" * 50)
+print("TEST 26: Floating point precision")
+print("=" * 50)
+ft_statistics(0.1, 0.2, 0.3, test="mean")
+
 
 # from statistics import ft_statistics
 

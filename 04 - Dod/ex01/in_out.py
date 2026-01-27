@@ -1,17 +1,21 @@
-from typing import Callable
+
+from typing import Callable, Union
 
 
-def square(x: int | float) -> int | float:
+
+def square(x: Union[int, float]) -> Union[int, float]:
     """Returns x squared."""
     return x * x
 
 
-def pow(x: int | float) -> int | float:
+
+def pow(x: Union[int, float]) -> Union[int, float]:
     """Returns x exponentiated by itself."""
     return x ** x
 
 
-def outer(x: int | float, function: Callable) -> object:
+
+def outer(x: Union[int, float], function: Callable) -> object:
     """
     Returns an inner function that applies `function`
     to x repeatedly with internal count increment.
