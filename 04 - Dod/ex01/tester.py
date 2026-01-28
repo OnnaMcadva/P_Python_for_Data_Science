@@ -1,36 +1,42 @@
-from in_out import outer, square, pow
+from in_out import mysquare, myouter, mypow
 
-my_counter = outer(3, square)
-print(my_counter())
-print(my_counter())
-print(my_counter())
-print("---")
 
-another_counter = outer(1.5, pow)
-print(another_counter())
-print(another_counter())
-print(another_counter())
+def main():
+	my_counter = myouter(3, mysquare)
+	print(my_counter())
+	print(my_counter())
+	print(my_counter())
+	print("---")
 
-# Additional edge-case tests
-print("---")
-# Test with negative number
-neg_counter = outer(-2, square)
-print(neg_counter())
-print(neg_counter())
+	another_counter = myouter(1.5, mypow)
+	print(another_counter())
+	print(another_counter())
+	print(another_counter())
 
-# Test with zero
-zero_counter = outer(0, pow)
-print(zero_counter())
+	# Additional edge-case tests
+	print("---")
+	# Test with negative number
+	neg_counter = myouter(-2, mysquare)
+	print(neg_counter())
+	print(neg_counter())
 
-# Test with float and custom function
-def plus_one(x):
-	return x + 1
-plus_counter = outer(1.5, plus_one)
-print(plus_counter())
-print(plus_counter())
+	# Test with zero
+	zero_counter = myouter(0, mypow)
+	print(zero_counter())
 
-# Test that counter is persistent
-persistent = outer(2, square)
-print(persistent())
-print(persistent())
-print(persistent())
+	# Test with float and custom function
+	def plus_one(x):
+		return x + 1
+	plus_counter = myouter(1.5, plus_one)
+	print(plus_counter())
+	print(plus_counter())
+
+	# Test that counter is persistent
+	persistent = myouter(2, mysquare)
+	print(persistent())
+	print(persistent())
+	print(persistent())
+
+
+if __name__ == "__main__":
+    main()

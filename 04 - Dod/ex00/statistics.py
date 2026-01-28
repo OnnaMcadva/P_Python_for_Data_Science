@@ -25,32 +25,25 @@ def ft_statistics(*args: Any, **kwargs: Any) -> None:
             return int(result) if result % 1 == 0 else result
 
         def quartile():
-            """Calculate Q1 and Q3 using linear interpolation."""
+            """Calculate inclusive quartiles (Q1 and Q3)."""
             n = len(numbers)
+            mid = n // 2
 
-            q1_pos = (n - 1) * 0.25
-            q1_lower = int(q1_pos)
-            q1_upper = q1_lower + 1
-            q1_weight = q1_pos - q1_lower
-
-            if q1_upper < n and q1_weight > 0:
-                q1 = numbers[q1_lower] * (1 - q1_weight)
-                + numbers[q1_upper] * q1_weight
+            if n % 2 == 0:
+                lower_half = numbers[:mid]
+                upper_half = numbers[mid:]
             else:
-                q1 = numbers[q1_lower]
+                lower_half = numbers[:mid + 1]
+                upper_half = numbers[mid:]
 
-            q3_pos = (n - 1) * 0.75
-            q3_lower = int(q3_pos)
-            q3_upper = q3_lower + 1
-            q3_weight = q3_pos - q3_lower
+            def median(data):
+                m = len(data)
+                mid = m // 2
+                if m % 2 == 0:
+                    return (data[mid - 1] + data[mid]) / 2
+                return data[mid]
 
-            if q3_upper < n and q3_weight > 0:
-                q3 = numbers[q3_lower] * (1 - q3_weight)
-                + numbers[q3_upper] * q3_weight
-            else:
-                q3 = numbers[q3_lower]
-
-            return [float(q1), float(q3)]
+            return [float(median(lower_half)), float(median(upper_half))]
 
         def var():
             """Calculate variance."""
