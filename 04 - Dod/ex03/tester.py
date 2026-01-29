@@ -8,22 +8,36 @@ def main():
 	# Additional edge-case tests
 	try:
 		student2 = Student(name="Edward", surname="agle", id="toto")
+		print(student2)
+	except Exception as e:
+		print("Error:", e)
+	
+	try:
+		student6 = Student(name="Edward", surname="agle", login="toto")
+		print(student6)
+	except Exception as e:
+		print("Error:", e)
+
+	try:
+		student7 = Student(name="Edward", surname="agle", toto="extra")
+		print(student7)
 	except Exception as e:
 		print("Error:", e)
 
 	# Test with different cases
-	student3 = Student(name="ALICE", surname="Smith")
+	student3 = Student(name="aLICE", surname="Smith")
 	print(student3)
 
 	# Test with empty surname
 	try:
-		student4 = Student(name="Bob", surname="")
+		student4 = Student(name="Bob", active=False, surname="")
 		print(student4)
 	except Exception as e:
 		print("Error:", e)
 
 	# Test that login and id cannot be changed
-	student5 = Student(name="Charlie", surname="Brown")
+	student5 = Student(name="Bob", surname="Lee")
+	print(student5)
 	try:
 		student5.login = "hack"
 	except Exception as e:
@@ -32,9 +46,8 @@ def main():
 		student5.id = "hackid"
 	except Exception as e:
 		print("Error:", e)
-
-	# Test that id is always 15 characters
-	print("ID length:", len(student5.id))
+	print(student5)
+	print(student5.login, "'s ID length still", len(student5.id))
 
 if __name__ == "__main__":
 	main()
