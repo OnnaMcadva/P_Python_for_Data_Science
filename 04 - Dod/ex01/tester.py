@@ -1,14 +1,14 @@
-from in_out import mysquare, myouter, mypow
+from in_out import ft_square, ft_outer, ft_pow
 
 
 def main():
-	my_counter = myouter(3, mysquare)
-	print(my_counter())
-	print(my_counter())
-	print(my_counter())
+	ft_counter = ft_outer(3, ft_square)
+	print(ft_counter())
+	print(ft_counter())
+	print(ft_counter())
 	print("---")
 
-	another_counter = myouter(1.5, mypow)
+	another_counter = ft_outer(1.5, ft_pow)
 	print(another_counter())
 	print(another_counter())
 	print(another_counter())
@@ -16,23 +16,23 @@ def main():
 	# Additional edge-case tests
 	print("---")
 	# Test with negative number
-	neg_counter = myouter(-2, mysquare)
+	neg_counter = ft_outer(-2, ft_square)
 	print(neg_counter())
 	print(neg_counter())
 
 	# Test with zero
-	zero_counter = myouter(0, mypow)
+	zero_counter = ft_outer(0, ft_pow)
 	print(zero_counter())
 
 	# Test with float and custom function
 	def plus_one(x):
 		return x + 1
-	plus_counter = myouter(1.5, plus_one)
+	plus_counter = ft_outer(1.5, plus_one)
 	print(plus_counter())
 	print(plus_counter())
 
 	# Test that counter is persistent
-	persistent = myouter(2, mysquare)
+	persistent = ft_outer(2, ft_square)
 	print(persistent())
 	print(persistent())
 	print(persistent())

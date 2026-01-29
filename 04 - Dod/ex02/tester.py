@@ -1,36 +1,42 @@
 from callLimit import callLimit
 
-@callLimit(3)
-def f():
-    print("f()")
 
-@callLimit(1)
-def g():
-    print("g()")
+def main():
+    @callLimit(3)
+    def f():
+        print("f()")
 
-for i in range(3):
-    f()
-    g()
+    @callLimit(1)
+    def g():
+        print("g()")
 
-# Additional edge-case tests
-@callLimit(0)
-def never():
-    print("Should not print")
+    for i in range(3):
+        f()
+        g()
 
-never()
-never()
+    # Additional edge-case tests
+    @callLimit(0)
+    def never():
+        print("Should not print")
 
-@callLimit(2)
-def with_args(x):
-    print(f"with_args: {x}")
+    never()
+    never()
 
-with_args(1)
-with_args(2)
-with_args(3)
+    @callLimit(2)
+    def with_args(x):
+        print(f"with_args: {x}")
 
-# Test that decorator does not affect other functions
-def plain():
-    print("plain function")
+    with_args(1)
+    with_args(2)
+    with_args(3)
 
-plain()
-plain()
+    # Test that decorator does not affect other functions
+    def plain():
+        print("plain function")
+
+    plain()
+    plain()
+
+
+if __name__ == "__main__":
+    main()
