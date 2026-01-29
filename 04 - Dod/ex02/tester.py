@@ -30,7 +30,7 @@ def main():
     with_args(2)
     with_args(3)
 
-    # Test that decorator does not affect other functions
+    # Test that decorator does not affect other functions without @
     callLimit(0)
     def plain():
         print("plain function")
