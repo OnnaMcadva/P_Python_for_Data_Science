@@ -10,7 +10,7 @@ def main():
     def g():
         print("g()")
 
-    for i in range(3):
+    for _ in range(3):
         f()
         g()
 
@@ -31,6 +31,7 @@ def main():
     with_args(3)
 
     # Test that decorator does not affect other functions
+    callLimit(0)
     def plain():
         print("plain function")
 
